@@ -1,0 +1,5 @@
+run cmd
+
+cd C:\ron\test
+
+http-server . -p 8000
