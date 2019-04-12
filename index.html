@@ -8,72 +8,31 @@
 	</head>
 	<body>
 		<script src="js/three.js"></script>
-        <script src="vanta.waves.min.js"></script>
 		<script>
-            
-			var canvasWidth = 800;
-            var canvasHeight = 800;
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 
-            var scene,
-                distance = 1500,
-                meshZOffset = 50,
-                fov = 2 * Math.atan(canvasHeight / (2 * (distance - meshZOffset))) * 180 / Math.PI,
-                camera = new THREE.PerspectiveCamera(fov, canvasWidth / canvasHeight, 0.1, distance);
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
 
-            var renderer = new THREE.WebGLRenderer({
-              antialias: true,
-              alpha: true
-            });
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            renderer.setSize(canvasWidth, canvasHeight);
-            document.body.appendChild(renderer.domElement);
+			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			var cube = new THREE.Mesh( geometry, material );
+			scene.add( cube );
 
-            var itemMaterial = new THREE.MeshPhongMaterial({
-              color: 0x2180ce,
-              shininess: 280
-            });
+			camera.position.z = 5;
 
-            var ambientLight = new THREE.AmbientLight(0xe5e5e5);
+			var animate = function () {
+				requestAnimationFrame( animate );
 
-            var light = new THREE.PointLight(0xffffff, 1, 0);
-            light.position.set(0, 0, 900);
-            // var light = new THREE.DirectionalLight(0xffffff, 1);
-            // light.position.set(0, 0, distance/4);
-            light.castShadow = true;
-            light.shadow.camera.near = 1;
-            light.shadow.camera.far = distance - 1;
-            light.shadow.radius = 10;
+				cube.rotation.x += 0.01;
+				cube.rotation.y += 0.01;
 
-            var shadowMaterial = new THREE.ShadowMaterial();
-            shadowMaterial.opacity = 0.3;
+				renderer.render( scene, camera );
+			};
 
-            var planeGeometry = new THREE.PlaneGeometry(canvasWidth * 2, canvasHeight * 2);
-            var shadowPlane = new THREE.Mesh(planeGeometry, shadowMaterial);
-            shadowPlane.receiveShadow = true;
-
-            camera.position.z = distance;
-
-            var itemGeometry = new THREE.TorusKnotBufferGeometry(80, 12, 100, 16);
-
-            function addItem(x, y) {
-              var item = new THREE.Mesh(itemGeometry, itemMaterial);
-              item.position.x = x;
-              item.position.y = y;
-              item.position.z = meshZOffset;
-              item.castShadow = true;
-              item.receiveShadow = true;
-              scene.add(item);
-            }
-
-            scene = new THREE.Scene();
-            scene.add(ambientLight);
-            scene.add(light);
-            scene.add(shadowPlane);
-            addItem(-200, 0);
-            addItem(200, 0);
-            renderer.render(scene, camera);
-
+			animate();
 		</script>
 	</body>
 </html>
