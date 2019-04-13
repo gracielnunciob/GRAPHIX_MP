@@ -24,7 +24,11 @@
     
     <h1 id="instructions">Click here to move around the view<img src="https://alignvisual.com/wp-content/uploads/icon-360_2-300x194.png" style=" vertical-align: text-bottom; width:50px;"></h1> 
     
-    <button id="changeBG">Click to Change Background</button>
+    <button id="changeGrass">Click to go to grasslands</button>
+    <button id="changeGrass">Click to go to desserts</button>
+    <button id="changeGrass">Click to go to space</button>
+    <button id="changeGrass">Click to go to snowy mountains</button>
+    
     
     <script>    
           var camera, scene, renderer;
@@ -204,12 +208,14 @@
               }), 
               // right side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBely_hills/hills_rt.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBely_hills/hills_lf.png'),
                 side: THREE.DoubleSide
               }), 
               // left side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBely_hills/hills_lf.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBely_hills/hills_rt.png'),
+                  
+                  
                 side: THREE.DoubleSide
               }) 
             ];
