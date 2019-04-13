@@ -87,32 +87,34 @@
             var cubeMaterials = [
               // back side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/ely_hills/hills_bk.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBarrakisday/arrakisday_bk.jpg'),
                 side: THREE.DoubleSide
               }),
               // front side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/ely_hills/hills_ft.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBarrakisday/arrakisday_ft.jpg'),
                 side: THREE.DoubleSide
               }), 
               // Top side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/ely_hills/hills_up.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBarrakisday/arrakisday_up2.jpg'),
                 side: THREE.DoubleSide
               }), 
               // Bottom side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/ely_hills/hills_dn.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBarrakisday/arrakisday_dn.jpg'),
                 side: THREE.DoubleSide
               }), 
               // right side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/ely_hills/hills_rt.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBarrakisday/arrakisday_lf.jpg'),
                 side: THREE.DoubleSide
               }), 
               // left side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/ely_hills/hills_lf.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBarrakisday/arrakisday_rt.jpg'),
+                  
+                  
                 side: THREE.DoubleSide
               }) 
             ];
@@ -176,35 +178,38 @@
         
           //Change background
           changeBG.onclick = function(){
+              
+              var cube = new THREE.CubeGeometry(1000, 1000, 1000);
+
                var cubeMaterials = [
               // back side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load(''),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBely_hills/hills_bk.png'),
                 side: THREE.DoubleSide
               }),
               // front side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/ely_hills/hills_ft.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBely_hills/hills_ft.png'),
                 side: THREE.DoubleSide
               }), 
               // Top side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/ely_hills/hills_up.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBely_hills/hills_up.png'),
                 side: THREE.DoubleSide
               }), 
               // Bottom side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/ely_hills/hills_dn.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBely_hills/hills_dn.png'),
                 side: THREE.DoubleSide
               }), 
               // right side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/ely_hills/hills_rt.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBely_hills/hills_rt.png'),
                 side: THREE.DoubleSide
               }), 
               // left side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/ely_hills/hills_lf.png'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBely_hills/hills_lf.png'),
                 side: THREE.DoubleSide
               }) 
             ];
@@ -213,7 +218,6 @@
             var cubeMaterial = new THREE.MeshFaceMaterial(cubeMaterials);
             var mesh = new THREE.Mesh(cube, cubeMaterial);
             scene.add(mesh);
-              
             renderer.render(scene, camera);
               
           }
