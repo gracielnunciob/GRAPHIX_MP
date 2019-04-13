@@ -9,8 +9,15 @@
         canvas{
             background: red;
         }
+        
+        .btn-primary{
+            margin-bottom: 10px;
+        }
 
     </style>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
 <body>
 
@@ -24,11 +31,18 @@
     
     <h1 id="instructions">Click here to move around the view<img src="https://alignvisual.com/wp-content/uploads/icon-360_2-300x194.png" style=" vertical-align: text-bottom; width:50px;"></h1> 
     
-    <button id="changeGrass">Click to go to grasslands</button>
+    <button type="button" class="btn btn-primary" id="changeGrass">Click to go to grasslands</button>
+    <button type="button" class="btn btn-primary" id="changeDessert">Click to go to the dessert</button>
+    <button type="button" class="btn btn-primary" id="changeSpace">Click to go to space</button>
+    <button type="button" class="btn btn-primary" id="changeMountain">Click to go to the snowy mountains</button>
+
+<!--
+    
     <button id="changeDessert">Click to go to desserts</button>
     <button id="changeSpace">Click to go to space</button>
     <button id="changeMountain">Click to go to snowy mountains</button>
     
+-->
     
     <script>    
           var camera, scene, renderer;
@@ -180,7 +194,7 @@
             renderer.render(scene, camera);
           }
         
-          //Change background
+          //Change Grass
           changeGrass.onclick = function(){
               
               var cube = new THREE.CubeGeometry(1000, 1000, 1000);
@@ -229,7 +243,7 @@
           }
           
           
-          //Change background
+          //Change Space
           changeSpace.onclick = function(){
               
               var cube = new THREE.CubeGeometry(1000, 1000, 1000);
