@@ -25,9 +25,9 @@
     <h1 id="instructions">Click here to move around the view<img src="https://alignvisual.com/wp-content/uploads/icon-360_2-300x194.png" style=" vertical-align: text-bottom; width:50px;"></h1> 
     
     <button id="changeGrass">Click to go to grasslands</button>
-    <button id="changeGrass">Click to go to desserts</button>
-    <button id="changeGrass">Click to go to space</button>
-    <button id="changeGrass">Click to go to snowy mountains</button>
+    <button id="changeDessert">Click to go to desserts</button>
+    <button id="changeSpace">Click to go to space</button>
+    <button id="changeMountain">Click to go to snowy mountains</button>
     
     
     <script>    
@@ -101,7 +101,7 @@
               }), 
               // Top side
               new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBarrakisday/arrakisday_up2.jpg'),
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/gracielnunciob/GRAPHIX_MP/master/SBarrakisday/arrakisday_up.jpg'),
                 side: THREE.DoubleSide
               }), 
               // Bottom side
@@ -181,7 +181,7 @@
           }
         
           //Change background
-          changeBG.onclick = function(){
+          changeGrass.onclick = function(){
               
               var cube = new THREE.CubeGeometry(1000, 1000, 1000);
 
