@@ -1,13 +1,182 @@
 <html>
-	<head>
-		<title>My first three.js app</title>
-		<style>
-			body { margin: 0; }
-			canvas { width: 100%; height: 100% }
-		</style>
-	</head>
-	<body>
-		<script src="js/three.js"></script>
+<head>
+    <style>
+    	body{
+    		margin: 0;
+    		overflow: hidden;
+        }
+
+        canvas{
+            background: red;
+        }
+
+    </style>
+</head>
+<body>
+
+<!--    <canvas id="myCanvas"></canvas>-->
+    
+    <h1 id="instructions">Click here to move around the view<img src="https://alignvisual.com/wp-content/uploads/icon-360_2-300x194.png" style=" vertical-align: text-bottom; width:50px;"></h1>
+    
+    
+    <script src="js/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://threejs.org/examples/js/controls/PointerLockControls.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/three-orbitcontrols@2.102.1/OrbitControls.min.js"></script>-->
+<!--    <script src="https://gist.github.com/bitbrain/108a2b2baa86abff5a722fd606ef4060.js"></script>-->
+    
+    <script>
+          var camera, scene, renderer;
+          var geometry, material, mesh;
+          var controls;
+
+          var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+          if (havePointerLock) {
+            var element = document.body;
+            var pointerlockchange = function(event) {
+              if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
+                controlsEnabled = true;
+                controls.enabled = true;
+              } else {
+                controls.enabled = false;
+              }
+            };
+
+            // Hook pointer lock state change events
+            document.addEventListener('pointerlockchange', pointerlockchange, false);
+            document.addEventListener('mozpointerlockchange', pointerlockchange, false);
+            document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
+
+            instructions.addEventListener('click', function(event) {
+
+              // Ask the browser to lock the pointer
+              if (/Firefox/i.test(navigator.userAgent)) {
+                var fullscreenchange = function(event) {
+                  element.requestPointerLock();
+                };
+                document.addEventListener('fullscreenchange', fullscreenchange, false);
+                document.addEventListener('mozfullscreenchange', fullscreenchange, false);
+                element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+                element.requestFullscreen();
+              } else {
+                element.requestPointerLock();
+              }
+            }, false);
+          } else {
+            instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+          }
+
+          init();
+          animate();
+
+          function init() {
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+            scene = new THREE.Scene();
+
+            //mouse movement
+            controls = new THREE.PointerLockControls(camera);
+
+            // cube
+            var cube = new THREE.CubeGeometry(1000, 1000, 1000);
+
+
+            var cubeMaterials = [
+              // back side
+              new THREE.MeshBasicMaterial({
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/baronwatts/skybox_images/master/back.jpg'),
+                side: THREE.DoubleSide
+              }),
+              // front side
+              new THREE.MeshBasicMaterial({
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/baronwatts/skybox_images/master/front.jpg'),
+                side: THREE.DoubleSide
+              }), 
+              // Top side
+              new THREE.MeshBasicMaterial({
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/baronwatts/skybox_images/master/top.jpg'),
+                side: THREE.DoubleSide
+              }), 
+              // Bottom side
+              new THREE.MeshBasicMaterial({
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/baronwatts/skybox_images/master/down.jpg'),
+                side: THREE.DoubleSide
+              }), 
+              // right side
+              new THREE.MeshBasicMaterial({
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/baronwatts/skybox_images/master/right.png'),
+                side: THREE.DoubleSide
+              }), 
+              // left side
+              new THREE.MeshBasicMaterial({
+                map: new THREE.TextureLoader().load('https://raw.githubusercontent.com/baronwatts/skybox_images/master/left.jpg'),
+                side: THREE.DoubleSide
+              }) 
+            ];
+
+            //add cube & materials
+            var cubeMaterial = new THREE.MeshFaceMaterial(cubeMaterials);
+            var mesh = new THREE.Mesh(cube, cubeMaterial);
+            scene.add(mesh);
+
+            //add light
+            var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+            scene.add(ambientLight);
+            scene.add(controls.getObject());
+
+            //add mesh
+            mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            // Add objects to the scene
+            /* geometry = new THREE.BoxGeometry( 20, 20, 20 );
+            for ( var i = 0, l = geometry.faces.length; i < l; i ++ ) {
+              var face = geometry.faces[ i ];
+              face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+              face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+              face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+            }
+            for ( var i = 0; i < 500; i ++ ) {
+              material = new THREE.MeshPhongMaterial( { specular: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors } );
+              var mesh = new THREE.Mesh( geometry, material );
+              mesh.position.x = Math.floor( Math.random() * 20 - 10 ) * 20;
+              mesh.position.y = Math.floor( Math.random() * 20 ) * 20 + 10;
+              mesh.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
+              scene.add( mesh );
+              material.color.setHSL( Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+              objects.push( mesh );
+            } */
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setClearColor(0xffffff);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+            window.addEventListener('resize', onWindowResize, false);
+
+          } //end init() 
+
+          //resize window
+          function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+          }
+
+          //render
+          function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+          }
+    
+    
+    </script>
+    
+
+    
+    
+<!--
+    <script src="js/three.js"></script>
 		<script>
 			var scene = new THREE.Scene();
 			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -15,11 +184,23 @@
 			var renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
+            
 
-			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-			var cube = new THREE.Mesh( geometry, material );
-			scene.add( cube );
+            var geometry = new THREE.CubeGeometry(10000, 10000, 10000);
+            var cubeMaterials = 
+                [
+                    new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader( ).load("ely_hills/hills_ft.png"), side: THREE.DoubleSide }),
+                    new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader( ).load("ely_hills/hills_bk.png"), side: THREE.DoubleSide }),
+                    new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader( ).load("ely_hills/hills_up.png"), side: THREE.DoubleSide }),
+                    new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader( ).load("ely_hills/hills_dn.png"), side: THREE.DoubleSide }),
+                    new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader( ).load("ely_hills/hills_rt.png"), side: THREE.DoubleSide }),
+                    new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader( ).load("ely_hills/hills_lf.png"), side: THREE.DoubleSide })
+                         
+                ]
+                
+            var cubeMaterial = new THREE.MeshFaceMaterial(cubeMaterials);
+            var cube = new THREE.Mesh(geometry, cubeMaterial);
+            scene.add(cube);
 
 			camera.position.z = 5;
 
@@ -33,6 +214,11 @@
 			};
 
 			animate();
+            
+            renderer.render( scene, camera );
 		</script>
-	</body>
+-->
+
+    
+</body>
 </html>
