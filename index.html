@@ -36,20 +36,25 @@
               <button type="button" class="dropdown-item" id="changeMountain">Mountains</button>
             </div>
         </li>
-        <li><button type="button" class="btn btn-outline-light">Spawn Sword</button></li>
-        <li><button type="button" class="btn btn-outline-light">Spawn Armor</button></li>
-        <li><button type="button" class="btn btn-outline-light">Spawn Mace</button></li>
-        <li><button type="button" class="btn btn-outline-light">Spawn Axe</button></li>
+        <li><button type="button" class="btn btn-outline-light" id="conjureSword">Conjure Sword</button></li>
+        <li><button type="button" class="btn btn-outline-light" id="conjureArmor">Conjure Armor</button></li>
+        <li><button type="button" class="btn btn-outline-light" id="conjureShield">Conjure Shield</button></li>
+        <li><button type="button" class="btn btn-outline-light" id="conjureAxe">Conjure Axe</button></li>
     </ul>    
   
     <script> 
+        let axe;
+        let shield;
+        let armor;
+        let sword;
+        
           var camera, scene, renderer;
           var geometry, material, mesh;
           var controls;
           
           var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
           var light = new THREE.PointLight( 0xffffff, 1, 100 );
-
+        
 
           var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
           if (havePointerLock) {
@@ -159,6 +164,27 @@
             const objLoader = new THREE.OBJLoader();              
             const mtlLoader = new THREE.MTLLoader();
               
+            
+//            for ( var i = 0; i < 50; i ++ ) {
+//              new Promise((resolve) => {
+//                mtlLoader.load('./blender-files/axe.mtl', (materials) => {
+//                resolve(materials);
+//              });
+//                })
+//                .then((materials) => {
+//                  materials.preload();
+//                  objLoader.setMaterials(materials);
+//                  objLoader.load('./blender-files/axe.obj', (object) => {
+//                    exporttest = object;
+//                    object.position.x = Math.floor( Math.random() * 20 - 10 ) * 20;
+//                    object.position.y = Math.floor( Math.random() * 20 ) * 20 + 10;
+//                    object.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
+//                    object.scale.set(10, 10, 10);
+//                    scene.add(object);
+//                  });
+//                });            
+//            }   
+              
             new Promise((resolve) => {
             mtlLoader.load('./blender-files/exporttest.mtl', (materials) => {
                 resolve(materials);
@@ -196,6 +222,15 @@
             } 
             */
               
+//              geometry = new THREE.BoxGeometry( 20, 20, 20 );
+//            for ( var i = 0, l = geometry.faces.length; i < l; i ++ ) {
+//              var face = geometry.faces[ i ];
+//              face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+//              face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+//              face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+//            }
+            
+              
             //END OF ADDING OBJECTS  
 
             renderer = new THREE.WebGLRenderer();
@@ -217,6 +252,20 @@
 
           //render
           function animate() {
+            if(axe){
+                    axe.rotation.y += 0.01;
+                }
+              
+            if(sword){
+                    sword.rotation.y += 0.01;
+                }
+            if(shield){
+                    shield.rotation.y += 0.01;
+                }     
+            if(armor){
+                    armor.rotation.y += 0.01;
+                }
+              
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
           }
@@ -224,9 +273,9 @@
           //Change Grass
           changeGrass.onclick = function(){
               
-            ambientLight.intensity = 1;
+            ambientLight.intensity = 0;
             light.color.setHex(0xFFFFFF);
-            light.intensity = 1;
+            light.intensity = 2;
             
             var cube = new THREE.CubeGeometry(1000, 1000, 1000);
 
@@ -383,10 +432,9 @@
           //Change background
           changeMountain.onclick = function(){
               
-              ambientLight.intensity = 0;
-              light.intensity = 3;
-              light.color.setHex(0xFFFFFF);
-
+            ambientLight.intensity = 0;
+            light.color.setHex(0xFFFFFF);
+            light.intensity = 2;;
               
               var cube = new THREE.CubeGeometry(1000, 1000, 1000);
 
@@ -432,6 +480,116 @@
             var mesh = new THREE.Mesh(cube, cubeMaterial);
             scene.add(mesh);
             renderer.render(scene, camera);
+              
+          }
+          
+          //Summon Swords
+          conjureSword.onclick = function(){
+            
+            const objLoader = new THREE.OBJLoader();              
+            const mtlLoader = new THREE.MTLLoader();
+              
+              new Promise((resolve) => {
+            mtlLoader.load('./blender-files/sword.mtl', (materials) => {
+                resolve(materials);
+              });
+                })
+                .then((materials) => {
+                  materials.preload();
+                  objLoader.setMaterials(materials);
+                  objLoader.load('./blender-files/sword.obj', (object) => {
+                    exporttest = object;
+                    scene.add(object);
+                    object.scale.set(10, 10, 10);
+                    object.position.x = 20;
+                    object.position.z = -20;
+                    sword = object;
+                    
+                  });
+                });
+              
+          }
+          
+          //Shield
+          conjureShield.onclick = function(){
+            
+            const objLoader = new THREE.OBJLoader();              
+            const mtlLoader = new THREE.MTLLoader();
+              
+              new Promise((resolve) => {
+            mtlLoader.load('./blender-files/shield.mtl', (materials) => {
+                resolve(materials);
+              });
+                })
+                .then((materials) => {
+                  materials.preload();
+                  objLoader.setMaterials(materials);
+                  objLoader.load('./blender-files/shield.obj', (object) => {
+                    exporttest = object;
+                    scene.add(object);
+                    object.scale.set(10, 10, 10);
+                    object.position.x = -20;
+                    object.position.z = -20;
+                    object.position.y = 15;
+                    shield = object;
+                    
+                  });
+                });
+              
+          }
+          
+          //armor
+          conjureArmor.onclick = function(){
+            
+            const objLoader = new THREE.OBJLoader();              
+            const mtlLoader = new THREE.MTLLoader();
+              
+              new Promise((resolve) => {
+            mtlLoader.load('./blender-files/armor.mtl', (materials) => {
+                resolve(materials);
+              });
+                })
+                .then((materials) => {
+                  materials.preload();
+                  objLoader.setMaterials(materials);
+                  objLoader.load('./blender-files/armor.obj', (object) => {
+                    exporttest = object;
+                    scene.add(object);
+                    object.scale.set(10, 10, 10);
+                    object.position.x = 20;
+                    object.position.z = -20;
+                    object.position.y = 12;
+                    armor = object;
+                    
+                  });
+                });
+              
+          }
+          
+          //Axe
+          conjureAxe.onclick = function(){
+            
+            const objLoader = new THREE.OBJLoader();              
+            const mtlLoader = new THREE.MTLLoader();
+              
+              new Promise((resolve) => {
+            mtlLoader.load('./blender-files/axe.mtl', (materials) => {
+                resolve(materials);
+              });
+                })
+                .then((materials) => {
+                  materials.preload();
+                  objLoader.setMaterials(materials);
+                  objLoader.load('./blender-files/axe.obj', (object) => {
+                    exporttest = object;
+                    scene.add(object);
+                    object.scale.set(10, 10, 10);
+                    object.position.x = -20;
+                    object.position.z = -20;
+                    axe = object;
+                    
+                  });
+                });
               
           }
           
