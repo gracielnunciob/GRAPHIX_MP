@@ -1,28 +1,32 @@
 <html>
 <head>
     
-    <link rel="stylesheet" type="text/css" href="../GRAPHIX_MP/css/index.css">
-
+<!--    MY STYLESHEET-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     
-    <script src="./js/three.js"></script>    
-    <script src="./js/GLTFLoader.js"></script>    
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>-->
-    <script src="https://threejs.org/examples/js/controls/PointerLockControls.js"></script>
-<!--    <script src="https://threejs.org/examples/js/loaders/GLTFLoader.js"></script>-->
+<!--    BOOTSTRAP-->
+    <link rel="stylesheet" type="text/css" href="../GRAPHIX_MP/css/index.css">
     
+<!--    THREE JS-->
+    <script src="./js/three.js"></script>    
+    <script src="./js/GLTFLoader.js"></script>  
+    <script src="./js/OBJLoader.js"></script>
+    <script src="./js/MTLLoader.js"></script>
+    <script src="https://threejs.org/examples/js/controls/PointerLockControls.js"></script>
+    
+<!--    OTHER JAVASCRIPT STUFF-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 </head>
+    
 <body>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
    
-
+<!--NAVBAR-->
     <ul class="nav nav-pills">
         <li><button type="button" class="btn btn-dark" id="instructions">Click for 360 View</button></li>
-        
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Change Location</a>
             <div class="dropdown-menu">
@@ -32,14 +36,13 @@
               <button type="button" class="dropdown-item" id="changeMountain">Mountains</button>
             </div>
         </li>
-        
         <li><button type="button" class="btn btn-outline-light">Spawn Sword</button></li>
         <li><button type="button" class="btn btn-outline-light">Spawn Armor</button></li>
         <li><button type="button" class="btn btn-outline-light">Spawn Mace</button></li>
         <li><button type="button" class="btn btn-outline-light">Spawn Axe</button></li>
     </ul>    
   
-    <script>    
+    <script> 
           var camera, scene, renderer;
           var geometry, material, mesh;
           var controls;
@@ -80,8 +83,6 @@
             instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
           }
 
-                
-        
           init();
           animate();
 
@@ -93,7 +94,7 @@
             //mouse movement
             controls = new THREE.PointerLockControls(camera);
 
-            // cube
+            // cube for skybox
             var cube = new THREE.CubeGeometry(1000, 1000, 1000);
 
 
@@ -145,17 +146,6 @@
             //add mesh
             mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
-              
-            //Add the loader
-            var loader = new THREE.GLTFLoader();
-            loader.load("./MODELS/playerfinish.glb", handle_load);
-             
-            function handle_load(gltf){
-                mesh = gltf.scene.children[0];
-                mesh.material = new THREE.MeshLambertMaterial();
-                scene.add(mesh);
-                mesh.position.z = -10;
-            }
 
             // Add objects to the scene
             /* geometry = new THREE.BoxGeometry( 20, 20, 20 );
@@ -175,6 +165,30 @@
               material.color.setHSL( Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
               objects.push( mesh );
             } */
+              
+              const objLoader = new THREE.OBJLoader();
+             // objLoader.setPath('/blender-files/');
+              
+              const mtlLoader = new THREE.MTLLoader();
+              //objLoader.setPath('/blender-files/');
+              
+              new Promise((resolve) => {
+              mtlLoader.load('./blender-files/exporttest.mtl', (materials) => {
+                resolve(materials);
+              });
+                })
+                .then((materials) => {
+                  materials.preload();
+                  objLoader.setMaterials(materials);
+                  objLoader.load('./blender-files/exporttest.obj', (object) => {
+                    exporttest = object;
+                    scene.add(object);
+                    object.scale.set(10, 10, 10);
+                    object.position.z = -20;
+                  });
+                });
+              
+              camera.position.z = 5;
               
             //END OF ADDING OBJECTS  
 
