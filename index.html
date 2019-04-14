@@ -89,6 +89,7 @@
         //init
           function init() {
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 5;
             scene = new THREE.Scene();
 
             //mouse movement
@@ -142,13 +143,39 @@
             var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
             scene.add(ambientLight);
             scene.add(controls.getObject());
+              
+            var light = new THREE.PointLight( 0xffffff, 1, 100 );
+            light.position.set( 0, 10, 0 );
+            light.castShadow = true;            // default false
+            scene.add( light );
 
             //add mesh
             mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
 
             // Add objects to the scene
-            /* geometry = new THREE.BoxGeometry( 20, 20, 20 );
+            const objLoader = new THREE.OBJLoader();              
+            const mtlLoader = new THREE.MTLLoader();
+              
+            new Promise((resolve) => {
+            mtlLoader.load('./blender-files/exporttest.mtl', (materials) => {
+                resolve(materials);
+              });
+                })
+                .then((materials) => {
+                  materials.preload();
+                  objLoader.setMaterials(materials);
+                  objLoader.load('./blender-files/exporttest.obj', (object) => {
+                    exporttest = object;
+                    scene.add(object);
+                    object.scale.set(10, 10, 10);
+                    object.position.z = -20;
+                  });
+                });
+                            
+            
+            // CUBES IF YOU WANT TO ADD THEM LANG HAHA
+            /*geometry = new THREE.BoxGeometry( 20, 20, 20 );
             for ( var i = 0, l = geometry.faces.length; i < l; i ++ ) {
               var face = geometry.faces[ i ];
               face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
@@ -163,32 +190,9 @@
               mesh.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
               scene.add( mesh );
               material.color.setHSL( Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-              objects.push( mesh );
-            } */
-              
-              const objLoader = new THREE.OBJLoader();
-             // objLoader.setPath('/blender-files/');
-              
-              const mtlLoader = new THREE.MTLLoader();
-              //objLoader.setPath('/blender-files/');
-              
-              new Promise((resolve) => {
-              mtlLoader.load('./blender-files/exporttest.mtl', (materials) => {
-                resolve(materials);
-              });
-                })
-                .then((materials) => {
-                  materials.preload();
-                  objLoader.setMaterials(materials);
-                  objLoader.load('./blender-files/exporttest.obj', (object) => {
-                    exporttest = object;
-                    scene.add(object);
-                    object.scale.set(10, 10, 10);
-                    object.position.z = -20;
-                  });
-                });
-              
-              camera.position.z = 5;
+              //objects.push( mesh );
+            } 
+            */
               
             //END OF ADDING OBJECTS  
 
@@ -198,6 +202,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
             window.addEventListener('resize', onWindowResize, false);
+            
 
           } //end init() 
 
@@ -217,7 +222,11 @@
           //Change Grass
           changeGrass.onclick = function(){
               
-              var cube = new THREE.CubeGeometry(1000, 1000, 1000);
+            var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+            scene.add(ambientLight);
+            scene.add(controls.getObject());
+
+            var cube = new THREE.CubeGeometry(1000, 1000, 1000);
 
                var cubeMaterials = [
               // back side
