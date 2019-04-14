@@ -1,0 +1,34 @@
+ 	body{
+    		margin: 0;
+    		overflow: hidden;
+        }
+
+        canvas{
+            background: red;
+        }
+
+        ul{
+            background-color: #333;
+        }
+
+        li {
+          float: left;
+          margin: 10px;
+        }
+
+        li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+        }
+
+        /* Change the link color to #111 (black) on hover */
+        li a:hover {
+          background-color: #111;
+        }
+        
+        .btn-primary{
+            margin-bottom: 10px;
+        }
